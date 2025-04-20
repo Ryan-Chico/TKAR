@@ -1,6 +1,10 @@
 import {
+  Viro3DObject,
+  ViroAmbientLight,
+  ViroAnimations,
   ViroARScene,
   ViroARSceneNavigator,
+  ViroMaterials,
   ViroText,
   ViroTrackingReason,
   ViroTrackingStateConstants,
@@ -10,23 +14,61 @@ import { StyleSheet } from "react-native";
 
 const HelloWorldSceneAR = () => {
   const [text, setText] = useState("Initializing AR...");
-
-  function onInitialized(state: any, reason: ViroTrackingReason) {
-    console.log("onInitialized", state, reason);
-    if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-      setText("Hello World!");
-    } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-      // Handle loss of tracking
+  ViroAnimations.registerAnimations({
+    rotate:{
+      duration:2500,
+      properties:{
+        rotateY:'+=90'
+      }
     }
-  }
-
+  })
+  
+  ViroMaterials.createMaterials({
+    texture: {
+      diffuseTexture: require('./assets/door51L.jpg')
+    }
+  })
   return (
-    <ViroARScene onTrackingUpdated={onInitialized}>
-      <ViroText
-        text={text}
-        scale={[0.5, 0.5, 0.5]}
-        position={[0, 0, -1]}
-        style={styles.helloWorldTextStyle}
+    <ViroARScene>
+     <ViroAmbientLight color={"#ffffff"}/>
+      <Viro3DObject 
+      source={require('./assets/MR-V03.obj')}
+      position={[0, 0, -1]}
+        scale={[0.01, 0.01, 0.01]}
+      animation={{name: 'rotate', loop:true, run: true}}
+      materials={"texture"}
+      type="OBJ"
+
+      />
+
+      <Viro3DObject
+        source={require('./assets/objTower1.obj')}
+        position={[-1, 0, -1]}
+        scale={[0.05, 0.05, 0.05]}
+        animation={{ name: 'rotate', loop: true, run: true }}
+        materials={"texture"}
+        type="OBJ"
+
+      />
+
+      <Viro3DObject
+        source={require('./assets/objTower2.obj')}
+        position={[2, 0, -3]}
+        scale={[0.3, 0.3, 0.3]}
+        animation={{ name: 'rotate', loop: true, run: true }}
+        materials={"texture"}
+        type="OBJ"
+
+      />
+
+      <Viro3DObject
+        source={require('./assets/objTower3.obj')}
+        position={[6, 0, -4]}
+        scale={[0.3, 0.3, 0.3]}
+        animation={{ name: 'rotate', loop: true, run: true }}
+        materials={"texture"}
+        type="OBJ"
+
       />
     </ViroARScene>
   );
